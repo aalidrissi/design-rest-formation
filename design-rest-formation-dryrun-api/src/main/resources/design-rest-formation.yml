@@ -42,18 +42,59 @@ paths:
         "401":
           description: Unauthorized
     post:
-      summary: book creation
+      summary: Book creation
       tags: 
         - "Library"
-      operationId: idBookCreation
-      responses:
-        "201":
-          description: CREATED
+      operationId: createBook
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Book'
+      responses:
+        "201":
+          description: Book successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: The ID of the created book
+              example:
+                id: 12345
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+  /books/{idbook}:
+    get:
+      summary: Obtenir les informations d'un livre
+      tags: 
+        - "Library"
+      description: Récupère les détails d'un livre basé sur son identifiant.
+      parameters:
+        - name: idbook
+          in: path
+          required: true
+          description: L'identifiant du livre à récupérer.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Détails du livre récupéré avec succès.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Requête invalide. L'identifiant du livre n'est pas valide.
+        '404':
+          description: Livre non trouvé. Aucun livre ne correspond à l'identifiant fourni.
+        '500':
+          description: Erreur interne du serveur.
 components:
  
   schemas:
